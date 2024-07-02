@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 public class EmployeeValidationErrorHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleBindException(BindException validationException, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException validationException, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<FieldValidationMessage> validationErrors =
                 validationException
                         .getBindingResult()
@@ -25,7 +26,7 @@ public class EmployeeValidationErrorHandler extends ResponseEntityExceptionHandl
                         .stream()
                         .map(fieldError -> {
                             String message = fieldError.getDefaultMessage();
-                            int order = 0;
+                            int order;
                             try {
                                 order = Employee.class.getDeclaredField(fieldError.getField())
                                         .getAnnotation(org.springframework.core.annotation.Order.class).value();

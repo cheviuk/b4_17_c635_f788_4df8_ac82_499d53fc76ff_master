@@ -1,5 +1,9 @@
 package com.hackerrank.validator.model;
 
+import com.hackerrank.validator.validation.AtConstraint;
+import com.hackerrank.validator.validation.DateFormatConstraint;
+import com.hackerrank.validator.validation.DigitsCountConstraint;
+import com.hackerrank.validator.validation.MandatoryConstraint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,15 +17,22 @@ public class Employee {
     private Integer id;
 
     @Order(1)
+    @MandatoryConstraint(message = "The fullName is a mandatory field")
     private String fullName;
 
     @Order(2)
+    @MandatoryConstraint(message = "The mobileNumber is a mandatory field")
+    @DigitsCountConstraint(value = 10, message = "The mobileNumber is a mandatory field")
     private Long mobileNumber;
 
     @Order(3)
+    @MandatoryConstraint(message = "The emailId is a mandatory field")
+    @AtConstraint
     private String emailId;
 
     @Order(4)
+    @MandatoryConstraint(message = "The dateOfBirth is a mandatory field")
+    @DateFormatConstraint(value = "YYYY-MM-DD", message = "The dateOfBirth should be in YYYY-MM-DD format")
     private String dateOfBirth;
 
     public Employee() {
